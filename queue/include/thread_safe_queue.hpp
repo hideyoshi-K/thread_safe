@@ -1,4 +1,4 @@
-#include <iostream>
+#include <mutex>
 #include <queue>
 
 namespace thread_safe
@@ -10,7 +10,14 @@ namespace thread_safe
         Queue() {}
         ~Queue() {}
 
+        void push(T val)
+        {
+            std::lock_guard<std::mutex> lock(m_mtx);
+            m_queue.push(val);
+        }
+
     private:
+        std::mutex    m_mtx;
         std::queue<T> m_queue;
     };
 }
